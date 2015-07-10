@@ -41,6 +41,9 @@ public class BucketListener {
 		// Ensure the topic exists and get the topic ARN.
 		String topicArn = awsSNClient.createTopic(config.getTopicName())
 				.getTopicArn();
+		
+		// Ensure the bucket exists
+		awsS3Client.createBucket(config.getBucketName());
 
 		// Is this topic already configured to listen to this bucket?
 		NotificationConfiguration notificationConfig = awsS3Client

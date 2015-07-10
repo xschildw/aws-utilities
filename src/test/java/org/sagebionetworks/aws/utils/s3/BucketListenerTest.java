@@ -56,6 +56,7 @@ public class BucketListenerTest {
 		BucketListener listener = new BucketListener(mockS3Client,
 				mockSNClient, config);
 		verify(mockSNClient).createTopic(topicName);
+		verify(mockS3Client).createBucket(bucketName);
 		ArgumentCaptor<String> nameCapture = ArgumentCaptor
 				.forClass(String.class);
 		ArgumentCaptor<BucketNotificationConfiguration> bucketConfigCapture = ArgumentCaptor
