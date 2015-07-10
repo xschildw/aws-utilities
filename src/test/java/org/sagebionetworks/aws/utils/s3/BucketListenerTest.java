@@ -72,6 +72,8 @@ public class BucketListenerTest {
 		assertEquals(topicArn, topicConfig.getTopicARN());
 		assertEquals("s3:ObjectCreated:*", topicConfig.getEvents().iterator()
 				.next());
+		// The policy should be set on the topic
+		verify(mockSNClient).setTopicAttributes(anyString(), anyString(), anyString());
 	}
 
 	@Test
@@ -87,6 +89,7 @@ public class BucketListenerTest {
 				mockSNClient, config);
 		verify(mockSNClient).createTopic(topicName);
 		verify(mockS3Client, never()).setBucketNotificationConfiguration(anyString(), any(BucketNotificationConfiguration.class));
+		verify(mockSNClient, never()).setTopicAttributes(anyString(), anyString(), anyString());
 	}
 
 	@Test (expected=IllegalArgumentException.class)
