@@ -133,4 +133,32 @@ public class KeyGeneratorUtilTest {
 		assertTrue("Clone: "+clone, clone.startsWith("000000901/2020-12-25/23-58-57-999-"));
 		assertTrue("Clone: "+clone, clone.endsWith("-rolling.csv.gz"));
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testParseRollingTooManyParts(){
+		String key = "000000901/2020-12-25/23-58-57-999-uuid-rolling.csv./one";
+		// call under test
+		KeyGeneratorUtil.parseKey(key);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testParseRollingTooFewParts(){
+		String key = "000000901/2020-12-25";
+		// call under test
+		KeyGeneratorUtil.parseKey(key);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testParseBadDate(){
+		String key = "000000901/2020-12-25-3/23-58-57-999-uuid-rolling.csv";
+		// call under test
+		KeyGeneratorUtil.parseKey(key);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testParseBadTime(){
+		String key = "000000901/2020-12-25/23-58-57.csv";
+		// call under test
+		KeyGeneratorUtil.parseKey(key);
+	}
 }
