@@ -1,7 +1,9 @@
 package org.sagebionetworks.aws.utils.s3;
 
 import java.util.Calendar;
+
 import static java.util.Calendar.*;
+
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -153,14 +155,23 @@ public class KeyGeneratorUtil {
 	public static KeyData parseKey(String key){
 		KeyData data = new KeyData();
 		String[] split = key.split("/");
+		if(split.length != 3){
+			throw new IllegalArgumentException("Unknown key format: "+key);
+		}
 		data.setStackInstanceNumber(Integer.parseInt(split[0]));
 		// Time is in two parts
 		String[] dateSplit = split[1].split("-");
+		if(dateSplit.length != 3){
+			throw new IllegalArgumentException("Unknown key format: "+key);
+		}
 		Calendar cal = getClaendarUTC();
 		cal.set(YEAR, Integer.parseInt(dateSplit[0]));
 		cal.set(MONTH, Integer.parseInt(dateSplit[1])-1);
 		cal.set(DATE, Integer.parseInt(dateSplit[2]));
 		String[] nameSplit = split[2].split("-");
+		if(nameSplit.length < 4){
+			throw new IllegalArgumentException("Unknown key format: "+key);
+		}
 		cal.set(HOUR_OF_DAY, Integer.parseInt(nameSplit[0]));
 		cal.set(MINUTE, Integer.parseInt(nameSplit[1]));
 		cal.set(SECOND, Integer.parseInt(nameSplit[2]));
