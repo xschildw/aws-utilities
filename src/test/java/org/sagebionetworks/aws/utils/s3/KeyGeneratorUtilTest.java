@@ -109,6 +109,7 @@ public class KeyGeneratorUtilTest {
 		KeyData data = KeyGeneratorUtil.parseKey(key);
 		assertNotNull(data);
 		assertEquals(901, data.getStackInstanceNumber());
+		assertEquals("accessrecord", data.getType());
 		assertEquals("000000901/2020-12-25", data.getPath());
 		assertEquals("23-58-57-999-uuid.csv.gz", data.getFileName());
 		assertFalse(data.isRolling());
@@ -125,6 +126,7 @@ public class KeyGeneratorUtilTest {
 		KeyData data = KeyGeneratorUtil.parseKey(key);
 		assertNotNull(data);
 		assertEquals(901, data.getStackInstanceNumber());
+		assertEquals("accessrecord", data.getType());
 		assertEquals("000000901/2020-12-25", data.getPath());
 		assertEquals("23-58-57-999-uuid-rolling.csv.gz", data.getFileName());
 		assertTrue(data.isRolling());
@@ -168,5 +170,22 @@ public class KeyGeneratorUtilTest {
 		String expected = "000000008/type/2020-01-01/01-09-04-003-uuid.csv.gz";
 		String resultsString = KeyGeneratorUtil.createKey(8, "type", 2020, 1, 1, 1,9,4,3, "uuid", false);
 		assertEquals(expected, resultsString);
+	}
+
+	@Test
+	public void testParseKeyWithType(){
+		String key = "000000901/type/2020-12-25/23-58-57-999-uuid.csv.gz";
+		// call under test
+		KeyData data = KeyGeneratorUtil.parseKey(key);
+		assertNotNull(data);
+		assertEquals(901, data.getStackInstanceNumber());
+		assertEquals("type", data.getType());
+		assertEquals("000000901/type/2020-12-25", data.getPath());
+		assertEquals("23-58-57-999-uuid.csv.gz", data.getFileName());
+		assertFalse(data.isRolling());
+		// check the date by creating a new key.
+		String clone = KeyGeneratorUtil.createNewKey(data.getStackInstanceNumber(), data.getType(), data.getTimeMS(), data.isRolling());
+		assertTrue("Clone: "+clone, clone.startsWith("000000901/type/2020-12-25/23-58-57-999-"));
+		assertTrue("Clone: "+clone, clone.endsWith(".csv.gz"));
 	}
 }

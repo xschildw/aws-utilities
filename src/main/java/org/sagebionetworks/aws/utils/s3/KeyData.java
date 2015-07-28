@@ -11,6 +11,13 @@ public class KeyData {
 	boolean rolling;
 	String fileName;
 	String path;
+	String type;
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public int getStackInstanceNumber() {
 		return stackInstanceNumber;
 	}
@@ -51,6 +58,7 @@ public class KeyData {
 		result = prime * result + (rolling ? 1231 : 1237);
 		result = prime * result + stackInstanceNumber;
 		result = prime * result + (int) (timeMS ^ (timeMS >>> 32));
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 	@Override
@@ -78,13 +86,18 @@ public class KeyData {
 			return false;
 		if (timeMS != other.timeMS)
 			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
 		return "KeyData [stackInstanceNumber=" + stackInstanceNumber
 				+ ", timeMS=" + timeMS + ", rolling=" + rolling + ", fileName="
-				+ fileName + ", path=" + path + "]";
+				+ fileName + ", path=" + path + ", type=" + type + "]";
 	}
 	
 	
