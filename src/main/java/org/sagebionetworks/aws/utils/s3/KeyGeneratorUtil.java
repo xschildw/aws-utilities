@@ -9,37 +9,55 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 /**
- * Utility for generating key for AccessRecords batches.
+ * Utility for generating key for AccessRecords batches and object snapshot.
  * 
  * @author John
+ * @author kimyen
  *
  */
 public class KeyGeneratorUtil {
-		
-	/**
-	 * This template is used to generated a key for a batch of AccessRecords:
-	 * <stack_instance>/<year><month><day>/<hour>/<uuid>.csv.gz
-	 */
+
 	private static final String INSTANCE_PREFIX_TEMPLATE = "%1$09d";
 	private static final String DATE_TEMPLATE = "%1$04d-%2$02d-%3$02d";
-	private static final String KEY_TEMPLATE = "%1$S/%2$S/%3$02d-%4$02d-%5$02d-%6$03d-%7$s%8$s.csv.gz";
 	public static final String ROLLING = "-rolling";
+	/**
+	 * This template is used to generated a key for a batch of AccessRecords:
+	 * <stack_instance>/<year><month><day>/<hour>/<uuid>(-rolling).csv.gz
+	 */
+	private static final String KEY_TEMPLATE = "%1$S/%2$S/%3$02d-%4$02d-%5$02d-%6$03d-%7$s%8$s.csv.gz";
+	/**
+	 * This template is used to generated a key for object snapshot:
+	 * <stack_instance>/<type>/<year><month><day>/<hour>/<uuid>(-rolling).csv.gz
+	 */
+	private static final String SNAPSHOT_KEY_TEMPLATE = "%1$S/%2$s/%3$S/%4$02d-%5$02d-%6$02d-%7$03d-%8$s%9$s.csv.gz";
+
 
 	/**
 	 * Create a new Key.
 	 * @return
 	 */
 	public static String createNewKey(int stackInstanceNumber, long timeMS, boolean rolling){
-	    Calendar cal = getCalendarUTC(timeMS);
-	    int year = cal.get(Calendar.YEAR);
-	    // We do a +1 because JANUARY=0 
-	    int month = cal.get(Calendar.MONTH) +1;
-	    int day = cal.get(Calendar.DAY_OF_MONTH);
+		return createNewKey(stackInstanceNumber, null, timeMS, rolling);
+	}
+
+	/**
+	 * Create a new Key.
+	 * @return
+	 */
+	public static String createNewKey(int stackInstanceNumber, String type, long timeMS, boolean rolling){
+		Calendar cal = getCalendarUTC(timeMS);
+		int year = cal.get(Calendar.YEAR);
+		// We do a +1 because JANUARY=0 
+		int month = cal.get(Calendar.MONTH) +1;
+		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
 		int mins = cal.get(Calendar.MINUTE);
 		int sec = cal.get(Calendar.SECOND);
 		int milli = cal.get(Calendar.MILLISECOND);
-	    return createKey(stackInstanceNumber, year, month, day, hour, mins, sec, milli, UUID.randomUUID().toString(), rolling);
+		if (type != null) {
+			return createKey(stackInstanceNumber, type, year, month, day, hour, mins, sec, milli, UUID.randomUUID().toString(), rolling);
+		}
+		return createKey(stackInstanceNumber, year, month, day, hour, mins, sec, milli, UUID.randomUUID().toString(), rolling);
 	}
 
 	/**
@@ -60,8 +78,7 @@ public class KeyGeneratorUtil {
 	public static Calendar getClaendarUTC(){
 		return Calendar.getInstance(TimeZone.getTimeZone("GMT+0:00"));
 	}
-	
-	
+
 	/**
 	 * Create a key from all of the parts.
 	 * @param instance The stack instance number must be padded with 
@@ -76,7 +93,23 @@ public class KeyGeneratorUtil {
 		String roll = rolling ? ROLLING : "";
 		return String.format(KEY_TEMPLATE, getInstancePrefix(instance), getDateString(year, month, day), hour, min, sec, milli, uuid, roll);
 	}
-	
+
+	/**
+	 * Create a key from all of the parts.
+	 * @param instance The stack instance number must be padded with 
+	 * @param type The type of the object
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @param hour
+	 * @param uuid
+	 * @return
+	 */
+	static String createKey(int instance, String type, int year, int month, int day, int hour, int min, int sec, int milli, String uuid, boolean rolling){
+		String roll = rolling ? ROLLING : "";
+		return String.format(SNAPSHOT_KEY_TEMPLATE, getInstancePrefix(instance), type, getDateString(year, month, day), hour, min, sec, milli, uuid, roll);
+	}
+
 	/**
 	 * Get the prefix used for this instance.
 	 * @param instance
