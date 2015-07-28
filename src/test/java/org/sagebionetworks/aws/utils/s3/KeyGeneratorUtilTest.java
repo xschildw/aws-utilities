@@ -161,4 +161,12 @@ public class KeyGeneratorUtilTest {
 		// call under test
 		KeyGeneratorUtil.parseKey(key);
 	}
+
+	@Test
+	public void testSnapshotKey(){
+		// Since S3 does alpha-numeric sorting on key names, we must pad all numbers
+		String expected = "000000008/type/2020-01-01/01-09-04-003-uuid.csv.gz";
+		String resultsString = KeyGeneratorUtil.createKey(8, "type", 2020, 1, 1, 1,9,4,3, "uuid", false);
+		assertEquals(expected, resultsString);
+	}
 }
