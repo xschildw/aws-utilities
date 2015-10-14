@@ -9,3 +9,9 @@ buildNumber.properties
 .settings
 .classpath
 .project
+
+*.class
+
+*.xml
+
+bin/
