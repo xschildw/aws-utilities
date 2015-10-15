@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.sagebionetworks</groupId>
 	<artifactId>aws-utilities</artifactId>
-	<version>1.0.8</version>
+	<version>1.0.9</version>
 	<repositories>
 		<repository>
 			<id>sagebionetworks-releases-local</id>
@@ -45,12 +45,6 @@
 			<artifactId>aws-java-sdk</artifactId>
 			<version>1.9.24</version>
 			<scope>provided</scope>
-		</dependency>
-		<!-- CSV reader and parser -->
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
