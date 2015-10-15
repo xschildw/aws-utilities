@@ -12,6 +12,4 @@ buildNumber.properties
 
 *.class
 
-*.xml
-
 bin/
