@@ -2,6 +2,7 @@ package org.sagebionetworks.aws.utils.s3;
 
 import java.util.Iterator;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -10,10 +11,10 @@ import com.amazonaws.services.sqs.model.UnsupportedOperationException;
 
 public class BucketDaoImpl implements BucketDao {
 
-	private AmazonS3Client awsS3Client;
+	private AmazonS3 awsS3Client;
 	private String bucketName;
 
-	public BucketDaoImpl(AmazonS3Client awsS3Client, String bucketName) {
+	public BucketDaoImpl(AmazonS3 awsS3Client, String bucketName) {
 		super();
 		this.awsS3Client = awsS3Client;
 		this.bucketName = bucketName;
