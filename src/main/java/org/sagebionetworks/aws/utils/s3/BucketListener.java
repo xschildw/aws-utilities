@@ -1,6 +1,5 @@
 package org.sagebionetworks.aws.utils.s3;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -8,7 +7,6 @@ import com.amazonaws.services.s3.model.BucketNotificationConfiguration;
 import com.amazonaws.services.s3.model.NotificationConfiguration;
 import com.amazonaws.services.s3.model.TopicConfiguration;
 import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.AddPermissionRequest;
 
 /**
  * Used to establish S3 object notification events to be published to an SNS
