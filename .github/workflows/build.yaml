@@ -24,8 +24,8 @@ jobs:
       - name: deploy
         run: mvn -B deploy
         env:
-          MAVEN_USERNAME: ${{ secrets.ARTIFACTORY_USER }}
-          MAVEN_USERPWD: ${{ secrets.ARTIFACTORY_PWD }}
+          MAVEN_USERNAME: ${{ secrets.PLATFORM_ARTIFACTORY_USER }}
+          MAVEN_USERPWD: ${{ secrets.PLATFORM_ARTIFACTORY_PWD }}
   test:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
